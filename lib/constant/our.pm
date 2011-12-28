@@ -9,11 +9,11 @@ constant::our - Perl pragma to declare constants like our vars
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use constant;
 use Exporter;
@@ -151,82 +151,82 @@ __END__
 
 =head1 DESCRIPTION
 
-    This pragma extends standard pragma 'constant'.
+This pragma extends standard pragma 'constant'.
 
-    As you may know, when a constant is used in an expression, Perl replaces it with its value at compile time, and may
-    then optimize the expression further. 
+As you may know, when a constant is used in an expression, Perl replaces it with its value at compile time, and may
+then optimize the expression further. 
 
-    You can inspect this behavior by yourself:
+You can inspect this behavior by yourself:
 
-        $ perl -MO=Deparse -e'use constant{DEBUG => 1}; warn "1"; if(DEBUG){warn "2"} warn 3;'
-        use constant ({'DEBUG', 1});
-        warn '1';
-        do {
-            warn '2'
-        };
-        warn 3;
+    $ perl -MO=Deparse -e'use constant{DEBUG => 1}; warn "1"; if(DEBUG){warn "2"} warn 3;'
+    use constant ({'DEBUG', 1});
+    warn '1';
+    do {
+        warn '2'
+    };
+    warn 3;
 
-    All warns are here.
+All warns are here.
 
-        $ perl -MO=Deparse -e'use constant{DEBUG => 0}; warn "1"; if(DEBUG){warn "2"} warn 3;'
-        use constant ({'DEBUG', 0});
-        warn '1';
-        '???'; 
-        warn 3;
+    $ perl -MO=Deparse -e'use constant{DEBUG => 0}; warn "1"; if(DEBUG){warn "2"} warn 3;'
+    use constant ({'DEBUG', 0});
+    warn '1';
+    '???'; 
+    warn 3;
 
-    Notice the '???' instead of the second 'warn'. 
+Notice the '???' instead of the second 'warn'. 
     
-    So you can do something like this: 
+So you can do something like this: 
 
-        # in the main script
-        use constant DEBUG => 0;
+    # in the main script
+    use constant DEBUG => 0;
 
-        # in a module
-        if(main::DEBUG)
-        {
-            # some debug code goes here
-        }
+    # in a module
+    if(main::DEBUG)
+    {
+        # some debug code goes here
+    }
 
-    But you should declare all constants you use, you can't simply write 
+But you should declare all constants you use, you can't simply write 
 
-        if(main::DEBUG_SQL)
-        {
-        }
+    if (main::DEBUG_SQL)
+    {
+    }
 
-    without corresponding 
+without corresponding 
 
-        use constant DEBUG_SQL => 0;
+    use constant DEBUG_SQL => 0;
 
-    in the main script.
+in the main script.
 
-    With constant::our you can freely use "undeclared" constants in your condition statements. 
+With constant::our you can freely use "undeclared" constants in your condition statements. 
 
-        # main script
-        use constant::our {
-            DEBUG => 1,
-            DEBUG_CACHE => 1,
-        };
+    # main script
+    use constant::our {
+        DEBUG => 1,
+        DEBUG_CACHE => 1,
+    };
 
-        ######################
-        package My::Cool::Tools;
-        use constant::our qw(DEBUG DEBUG_SQL); # don't need DEBUG_CACHE, but want (undeclared) DEBUG_SQL
+    ######################
+    package My::Cool::Tools;
+    use constant::our qw(DEBUG DEBUG_SQL); # don't need DEBUG_CACHE, but want (undeclared) DEBUG_SQL
 
-        DEBUG && warn "DEBUG: $debug_info";              # DEBUG --> 1 
-        DEBUG && DEBUG_SQL && warn "DEBUG_SQL: $query";  # DEBUG_SQL --> undef
+    DEBUG && warn "DEBUG: $debug_info";              # DEBUG --> 1 
+    DEBUG && DEBUG_SQL && warn "DEBUG_SQL: $query";  # DEBUG_SQL --> undef
 
     stderr: 
     "DEBUG: ..."
 
-
 =head1 IMPORTANT
 
-    A constant should be declared no more than one time. If you try to declare a constant twice (with different values), your program will die. 
+A constant should be declared no more than one time.
+If you try to declare a constant twice (with different values), your program will die. 
 
-    Since use of undeclared constant implicitly declares it, you should declare your constants _before_ you start use them. 
+Since use of undeclared constant implicitly declares it, you should declare your constants _before_ you start use them. 
 
 =head1 EXPORT
 
-    Nothing by default.
+Nothing by default.
 
 =head1 SEE ALSO
 
@@ -279,6 +279,5 @@ Copyright 2009 Green, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-
 
 =cut
