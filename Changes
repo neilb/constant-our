@@ -1,5 +1,14 @@
 Revision history for constant::our
 
-0.01    Date/time
-        First version, released on an unsuspecting world.
+0.02 unreleased
+
+    - Added pod to constant::our::ENV to stop test failing if you have
+      Pod::Coverage and Test::Pod::Coverage installed
+    - Fixed MANIFEST to match contents of dist
+    - Reformatted pod for constant::our, so narrative text is in ordinary
+      paragraphs, not verbatim
+
+0.01 2010-12-16
+
+    - First version, released on an unsuspecting world.
 
